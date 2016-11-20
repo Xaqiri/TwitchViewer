@@ -16,18 +16,38 @@ img {
 
 #main { 
     font-size: 16px; 
+    text-align: left;   
+}
+
+#main div { 
+    text-align: center; 
+}
+
+#streamers { 
+    padding: 5rem; 
+} 
+
+#streamers div { 
+    padding: 1px; 
+    margin-bottom: .5rem; 
+} 
+
+#input {
+    color: #000; 
     text-align: left; 
-    padding: 5rem;  
+} 
+
+#inputButton { 
+    color: #000; 
+    text-align: left; 
 }
 
 .streamerOnline { 
     background-color: #0A0; 
     color: #FFF; 
-    margin-bottom: .5rem; 
 }
 
 .streamerOffline { 
     background-color: #A00; 
     color: #FFF; 
-    margin-bottom: .5rem; 
 }

@@ -7,11 +7,18 @@
         <link href="css/bootstrap.min.css" rel="stylesheet"> 
         <link href="css/twitch.css" rel="stylesheet"> 
         <script src="js/jquery.min.js"></script> 
-        <script src="js/twitch.js"></script> 
+        <script src="js/twitch.js"></script>
     </head>
     <body> 
         <div id="main" class="container-fluid"> 
             <div id="title">Twitch Viewer</div> 
+            <div> 
+                <h4>Check online status for followers of channel:</h4> 
+                <input type="text" name="user" value=" " id="input">
+                <button class="btn btn-primary right" role="button" id="inputButton">Submit 
+                </button> 
+            </div> 
+            <div id="streamers"></div>
         </div>
     </body>
 </html>
