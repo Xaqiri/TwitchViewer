@@ -1,56 +1,101 @@
-let popStreamers = function (streamers, numStreamers) {
-  for (let i = 0; i < numStreamers; i++) {
+let popRemovedStreamers = function (streamers) {
+  $('div.streamerOnline').remove()
+  $('div.streamerOffline').remove()
+  $('div.streamerRemoved').remove()
+  for (let i = 0; i < streamers.length; i++) {
     let streamer = streamers[i]
     $.getJSON('https://wind-bow.hyperdev.space/twitch-api/streams/' + streamer + '?callback=?', function (data) {
-      if (data['stream'] !== null) {
+      if (data['stream'] === undefined) {
+        let s = $("<div class='row streamerRemoved'></div>")
+        $('#removedStreamers').append(s)
+        let streamerLogo = $('<div class="col-sm-4"></div>').html('')
+        let streamerName = $('<div class="col-sm-4"></div>').html(streamer)
+        let streamerGame = $('<div class="col-sm-4"></div>').html('Channel Removed')
+        $(s).append(streamerLogo)
+        $(s).append(streamerName)
+        $(s).append(streamerGame)
+      }
+    })
+  }
+}
+
+let popOnlineStreamers = function (streamers) {
+  $('div.streamerOnline').remove()
+  $('div.streamerOffline').remove()
+  $('div.streamerRemoved').remove()
+  for (let i = 0; i < streamers.length; i++) {
+    let streamer = streamers[i]
+    $.getJSON('https://wind-bow.hyperdev.space/twitch-api/streams/' + streamer + '?callback=?', function (data) {
+      if (data['stream'] !== null && data['stream'] !== undefined) {
         let s = $("<div class='row streamerOnline'></div>")
-        $('#streamers').append(s)
+        $('#onlineStreamers').append(s)
         let streamerLogo = $('<div class="col-sm-4">').html('<img src=' + data.stream.channel.logo + '></div>')
-        let streamerName = $('<div class="col-sm-4"></div>').html(data.stream.channel.display_name)
+        let streamerName = $('<div class="col-sm-4"></div>').html(streamer)
         let streamerGame = $('<div class="col-sm-4"></div>').html(data.stream.channel.status)
         $(s).append(streamerLogo)
         $(s).append(streamerName)
         $(s).append(streamerGame)
-      } else {
-        $.getJSON('https://wind-bow.hyperdev.space/twitch-api/users/' + streamer + '?callback=?', function (data) {
-          let s = $("<div class='row streamerOffline'></div>")
-          $('#streamers').append(s)
-          let streamerLogo = $('<div class="col-sm-4">').html('<img src=' + data.logo + '></div>')
-          let streamerName = $('<div class="col-sm-4"></div>').html(streamer)
-          let streamerGame = $('<div class="col-sm-4"></div>').html('Offline')
-          $(s).append(streamerLogo)
-          $(s).append(streamerName)
-          $(s).append(streamerGame)
+        $(s).wrap(function () {
+          let link = $('<a/>')
+          link.attr('href', 'https://twitch.tv/' + streamer)
+          return link
         })
       }
     })
   }
 }
 
-let getStreamers = function (user, streamers) {
-  if (user) {
-    $.getJSON('https://wind-bow.hyperdev.space/twitch-api/users/' + user + '/follows/channels?callback=?', function (data) {
-      console.log(streamers)
-      for (let i = 0; i < data.follows.length; i++) {
-        streamers.push(data.follows[i].channel.display_name)
-      }
-      popStreamers(streamers, streamers.length)
+let popOfflineStreamers = function (streamers) {
+  $('div.streamerOnline').remove()
+  $('div.streamerOffline').remove()
+  $('div.streamerRemoved').remove()
+  for (let i = 0; i < streamers.length; i++) {
+    let streamer = streamers[i]
+    $.getJSON('https://wind-bow.hyperdev.space/twitch-api/streams/' + streamer + '?callback=?', function (data) {
+      if (data['stream'] === null && data['stream'] !== undefined) {
+        $.getJSON('https://wind-bow.hyperdev.space/twitch-api/users/' + streamer + '?callback=?', function (data) {
+          let s = $("<div class='row streamerOffline'></div>")
+          $('#offlineStreamers').append(s)
+          let streamerLogo = $('<div class="col-sm-4">').html('<img src=' + data.logo + '></div>')
+          let streamerName = $('<div class="col-sm-4"></div>').html(streamer)
+          let streamerGame = $('<div class="col-sm-4"></div>').html('Offline')
+          $(s).append(streamerLogo)
+          $(s).append(streamerName)
+          $(s).append(streamerGame)
+          $(s).wrap(function () {
+            let link = $('<a/>')
+            link.attr('href', 'https://twitch.tv/' + streamer)
+            return link
+          })
+        })
+      } 
     })
-  } else {
-    streamers = ['ESL_SC2', 'OgamingSC2', 'cretetion', 'freecodecamp', 'storbeck', 'habathcx', 'RobotCaleb', 'noobs2ninjas']
-    popStreamers(streamers, streamers.length)
   }
 }
 
+let popAllStreamers = function (streamers) {
+  $('div.streamerOnline').remove()
+  $('div.streamerOffline').remove()
+  popOnlineStreamers(streamers)
+  popOfflineStreamers(streamers)
+  popRemovedStreamers(streamers)
+}
+
 $(document).ready(function () {
-  let streamers = []
-  let user = ''
-  $('#inputButton').on('click', function () {
-    if ($('#input').val() !== user) {
-      user = $('#input').val()
-      streamers = []
-      $('#streamers').empty()
-      getStreamers(user, streamers)
-    }
+  let defaultStreamers = [
+    'ESL_SC2', 'OgamingSC2', 'cretetion', 'freecodecamp',
+    'storbeck', 'habathcx', 'RobotCaleb', 'noobs2ninjas',
+    'comster404'
+  ]
+
+  popAllStreamers(defaultStreamers)
+  $('#allButton').on('click', function () {
+    popAllStreamers(defaultStreamers)
+  })
+  $('#onlineButton').on('click', function () {
+    popOnlineStreamers(defaultStreamers)
+  })
+  $('#offlineButton').on('click', function () {
+    popOfflineStreamers(defaultStreamers)
   })
 })

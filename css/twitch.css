@@ -5,23 +5,30 @@ body {
     padding-top: 20px; 
 } 
 
+footer { 
+     color: #DDD; 
+     text-align: center; 
+     padding-top: 1rem; 
+
+} 
+
 img { 
     height: 5rem; 
-}
+} 
 
 #title { 
     font-size: 64px; 
     text-align: center; 
-}
+} 
 
 #main { 
     font-size: 16px; 
     text-align: left;   
-}
+} 
 
 #main div { 
     text-align: center; 
-}
+} 
 
 #streamers { 
     padding: 5rem; 
@@ -32,22 +39,38 @@ img {
     margin-bottom: .5rem; 
 } 
 
+#streamers link { 
+    background-color: #FFF; 
+} 
+
 #input {
     color: #000; 
     text-align: left; 
 } 
 
-#inputButton { 
-    color: #000; 
-    text-align: left; 
-}
+#onlineButton { 
+    color: #FFF; 
+} 
+
+#offlineButton { 
+    color: #FFF;  
+} 
+
+#allButton { 
+    color: #FFF; 
+} 
 
 .streamerOnline { 
     background-color: #0A0; 
     color: #FFF; 
-}
+} 
 
 .streamerOffline { 
     background-color: #A00; 
     color: #FFF; 
-}
+} 
+
+.streamerRemoved {
+    background-color: #DDD; 
+    color: #000; 
+ }
